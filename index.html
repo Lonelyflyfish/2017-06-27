@@ -1,19 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>git</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title></title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
         div{
-            width: 100px;
-            height: 100px;
+            width: 200px;
+            height: 200px;
             background: red;
+            position: absolute;
+            top:0;
+            left: 0;
+        }
+        #div2{
+            top:220px;
+            background: blue;
         }
     </style>
+    <script>
+        function drag(obj) {
+            var l=0;
+            var t=0;
+            obj.addEventListener('touchstart',function (ev) {
+                var oldL=obj.offsetLeft;
+                var oldT=obj.offsetTop;
+                var oldX=ev.targetTouches[0].pageX;
+                var oldY=ev.targetTouches[0].pageY;
+                var id=ev.targetTouches[0].identifier;
 
+                function move(ev) {
+                    if(id==ev.targetTouches[0].identifier){
+                        l=ev.targetTouches[0].pageX-oldX;
+                        t=ev.targetTouches[0].pageY-oldY;
+                        obj.style.WebkitTransform='translate3d('+l+'px,'+t+'px,0)';
+                    }
+                }
+
+                function end(ev) {
+                    if(ev.changedTouches[0].identifier==id){
+                        obj.style.top=oldT+t+'px';
+                        obj.style.left=oldL+l+'px';
+                        obj.style.WebkitTransform='';
+                        document.removeEventListener('touchmove',move,false);
+
+                        document.removeEventListener('touchend',end,false);
+                    }
+
+                }
+
+                document.addEventListener('touchmove',move,false);
+
+                document.addEventListener('touchend',end,false);
+
+                ev.preventDefault();
+            }, false)
+        }
+        window.addEventListener('DOMContentLoaded',function () {
+            var oDiv1=document.getElementById('div1');
+            var oDiv2=document.getElementById('div2');
+            drag(oDiv1);
+            drag(oDiv2);
+        },false)
+    </script>
 </head>
 <body>
-    <div></div>
-    <a href="aaa.html">aaa</a>
+    <div id="div1"></div>
+    <div id="div2"></div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
